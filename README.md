@@ -72,7 +72,7 @@ This will show generated QR codes.
 ```
 
 
-###### Packet forwarding and ip address limiting
+# Packet forwarding and ip address limiting
 
 By default, data from wireguard peers cannot access the LAN.
 To allow peers to access the LAN, uncomment the following line in */etc/syscl.conf*
@@ -88,13 +88,13 @@ If you wish to limit access to certain addresses, add the LAN range to the *serv
 IP addresses added to *server.conf.whitelist* will be forward from the peers.
 
 The following will only allow 192.168.1.100 and 192.168.1.48 and prevent any other access to the LAN
-# server.conf.whitelist
+###### server.conf.whitelist
 ```bash
 192.168.1.48/32
 192.168.1.100/32
 ```
 
-# server.conf.blacklist
+###### server.conf.blacklist
 ```bash
 192.168.1.0/24
 ```
