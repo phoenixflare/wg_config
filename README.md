@@ -75,11 +75,11 @@ This will show generated QR codes.
 # Packet forwarding and ip address limiting
 
 By default, data from wireguard peers cannot access the LAN.
-To allow peers to access the LAN, uncomment the following line in */etc/syscl.conf*
+To allow peers to access the LAN, uncomment the following line in **/etc/sysctl.conf**
 ```bash
-net.ipv4.ip_forward
+net.ipv4.ip_forward=1
 ```
-A restart is required after his has been enabled.
+A restart is required after this has been enabled.
 
 
 ### Whitelist and blacklist
