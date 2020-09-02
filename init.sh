@@ -49,5 +49,5 @@ fi
 
 if [[ ! -f /etc/wireguard/${wg_interface}.conf ]] ; then
     wg-quick up $wg_interface
-    ./config.sh -r
+    sudo ./config.sh -r
 fi
