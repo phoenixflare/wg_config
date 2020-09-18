@@ -99,10 +99,6 @@ The following will only allow 192.168.1.100 and 192.168.1.48 and prevent any oth
 192.168.1.0/24
 ```
 
-When these files are changed, a reload of the wireguard interface is required.
-```bash
-./config.sh -r
-```
 
 By default all ports are open to be routed through wireguard. If you wish to restrict access
 to certain ports, add the ports to *server.conf.ports.whitelist*. This will block every TCP
@@ -114,4 +110,9 @@ The following will only allow SMB access from a wireguard client
 ```bash
 139
 445
+```
+
+When these files are changed, a reload of the wireguard interface is required.
+```bash
+./config.sh -r
 ```
