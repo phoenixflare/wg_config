@@ -72,7 +72,7 @@ This will show generated QR codes.
 ```
 
 
-# Packet forwarding and ip address limiting
+# Packet forwarding, ip address limiting, and port blocking
 
 By default, data from wireguard peers cannot access the LAN.
 To allow peers to access the LAN, uncomment the following line in **/etc/sysctl.conf**
@@ -102,4 +102,16 @@ The following will only allow 192.168.1.100 and 192.168.1.48 and prevent any oth
 When these files are changed, a reload of the wireguard interface is required.
 ```bash
 ./config.sh -r
+```
+
+By default all ports are open to be routed through wireguard. If you wish to restrict access
+to certain ports, add the ports to *server.conf.ports.whitelist*. This will block every TCP
+and UDP ports except those specifed in the whitelist. If there is no ports specified in the
+whitelist, then all ports will be available to the client.
+
+The following will only allow SMB access from a wireguard client
+###### server.conf.ports.whitelist
+```bash
+139
+445
 ```
