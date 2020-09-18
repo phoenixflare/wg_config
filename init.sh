@@ -47,6 +47,10 @@ if [[ ! -f server.conf.blacklist ]] ; then
     touch server.conf.blacklist
 fi
 
+if [[ ! -f server.conf.ports.whitelist ]] ; then
+    touch server.conf.ports.whitelist
+fi
+
 if [[ ! -f /etc/wireguard/${wg_interface}.conf ]] ; then
     wg-quick up $wg_interface
     sudo ./config.sh -r

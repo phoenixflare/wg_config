@@ -9,8 +9,11 @@ WG_CONF_FILE="/etc/wireguard/$_INTERFACE.conf"
 generate_and_install_server_config_file() {
     whitelist=$(paste -d, -s server.conf.whitelist)
     blacklist=$(paste -d, -s server.conf.blacklist)
+    whitelist_ports=$(paste -d, -s server.conf.ports.whitelist)
+
     postup="iptables -A FORWARD -i %i -j ACCEPT;"
     postdown="iptables -D FORWARD -i %i -j ACCEPT;"
+
     if [ ! -z "$whitelist" ] ; then
         postup="${postup} iptables -A FORWARD -i %i -d ${whitelist} -j ACCEPT;"
         postdown="${postdown} iptables -D FORWARD -i %i -d ${whitelist} -j ACCEPT;"
@@ -20,8 +23,13 @@ generate_and_install_server_config_file() {
         postdown="${postdown} iptables -D FORWARD -i %i -d ${blacklist} -j DROP;"
     fi
 
-    postup="${postup} iptables -A FORWARD -o %i -j ACCEPT; iptables -t nat -A POSTROUTING -o ${_PRIMARY_INTERFACE} -j MASQUERADE"
-    postdown="${postdown} iptables -D FORWARD -o %i -j ACCEPT; iptables -t nat -D POSTROUTING -o ${_PRIMARY_INTERFACE} -j MASQUERADE"
+    if [ ! -z "$whitelist_ports" ] ; then
+        postup="${postup} iptables -A FORWARD -o %i -j ACCEPT; iptables -t nat -A POSTROUTING -o ${_PRIMARY_INTERFACE} -p tcp --match multiport --dport ${whitelist_ports} -j MASQUERADE; iptables -t nat -A POSTROUTING -o ${_PRIMARY_INTERFACE} -p udp --match multiport --dport ${whitelist_ports} -j MASQUERADE"
+        postdown="${postdown} iptables -D FORWARD -o %i -j ACCEPT; iptables -t nat -D POSTROUTING -o ${_PRIMARY_INTERFACE} -p tcp --match multiport --dport ${whitelist_ports} -j MASQUERADE; iptables -t nat -A POSTROUTING -o ${_PRIMARY_INTERFACE} -p udp --match multiport --dport ${whitelist_ports} -j MASQUERADE"
+    else
+        postup="${postup} iptables -A FORWARD -o %i -j ACCEPT; iptables -t nat -A POSTROUTING -o ${_PRIMARY_INTERFACE} -j MASQUERADE"
+        postdown="${postdown} iptables -D FORWARD -o %i -j ACCEPT; iptables -t nat -D POSTROUTING -o ${_PRIMARY_INTERFACE} -j MASQUERADE"
+    fi
 
     local template_file=${SERVER_TPL_FILE}
     local ip
