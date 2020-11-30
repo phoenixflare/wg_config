@@ -1,4 +1,4 @@
-#/bin/bash
+#!/bin/bash
 
 read -p "Enter the wireguard interface [wg0]: " wg_interface
 wg_interface=${wg_interface:-wg0}
@@ -16,9 +16,9 @@ read -p "Enter the server ip range [192.168.99.0/24]: " ip_range
 ip_range=${ip_range:-'192.168.99.0/24'}
 
 read -p "Use existing public and private key? Y/N [N]: " use_existing_keys
-use_existing_keys=${use_existing_keys:N}
+use_existing_keys=${use_existing_keys:-N}
 
-if [[ ${use_existing_keys,,} == 'n' ]] ; then
+if [[ ${use_existing_keys,,} != 'n' ]] ; then
 	read -p "Private key: " private_key
 	read -p "Public key: " public_key
 	echo $private_key > ${wg_interface}.key.private
